@@ -1,0 +1,11 @@
+.import.error {
+    background-color: #ff3a36;
+    color: #2d3748;
+    margin-bottom: var(--pico-spacing);
+}
+
+.import.info {
+    background-color: #39e25b;
+    color: #2d3748;
+    margin-bottom: var(--pico-spacing);
+}

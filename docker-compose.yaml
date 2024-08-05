@@ -2,10 +2,8 @@ version: '3.9'
 
 services:
   php: &php-template
-    build:
-      context: ./
-      dockerfile: Dockerfile
-    image: php83:latest
+    build: .
+    image: php82:latest
     restart: unless-stopped
     volumes:
       - ".:/var/www/html"
@@ -15,6 +13,17 @@ services:
     environment:
       - "DB_HOST=mysql"
       - "MEMCACHED_HOST=memcached"
+    depends_on:
+      mysql:
+        condition: service_healthy
+  queue:
+    <<: *php-template
+    restart: unless-stopped
+    command: "php artisan queue:work"
+  migrate:
+    <<: *php-template
+    restart: no
+    command: "php artisan migrate"
   nginx:
     image: nginx:stable-alpine
     restart: unless-stopped
@@ -37,8 +46,14 @@ services:
       MYSQL_PASSWORD: 111111
     volumes:
       - db:/var/lib/mysql
+    healthcheck:
+      test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
+      timeout: 20s
+      retries: 10
   memcached:
     image: sameersbn/memcached:1.5.6-2
+    ports:
+      - "11211:11211"
     restart: unless-stopped
 
 volumes:
