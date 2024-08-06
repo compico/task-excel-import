@@ -12,6 +12,7 @@ Route::get(
     [ProductController::class, 'list']
 )->name('product.list')->whereNumber('page');
 
-Route::get('/product/{id}', function (int $id){
-    return view('product.index');
-})->whereNumber('id');
+Route::get(
+    '/product/{id}',
+    [ProductController::class, 'index']
+)->whereNumber('id');

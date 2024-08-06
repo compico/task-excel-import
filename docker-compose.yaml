@@ -30,6 +30,7 @@ services:
     volumes:
       - "./public:/var/www/html/public"
       - "./docker/nginx/conf.d:/etc/nginx/conf.d"
+      - "./storage/app/public:/var/www/html/public/storage"
     ports:
       - "8080:80"
     depends_on:

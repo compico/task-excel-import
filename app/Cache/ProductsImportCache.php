@@ -9,17 +9,18 @@ use Illuminate\Support\Facades\Cache;
 class ProductsImportCache extends Cache
 {
     /** @var string */
-    const KEY_FORMAT = 'import_products:%s';
+    protected const KEY_FORMAT = 'import_products:%s';
+    public const STATUS_IMPORTED = 'imported';
 
-    static public function IsFileImported(string $hash): bool
+    public static function IsFileImported(string $hash): bool
     {
         $cache = self::get(sprintf(self::KEY_FORMAT, $hash));
 
-        return $cache !== null;
+        return $cache !== null ;
     }
 
-    static public function AddCache(string $hash, int $importId): bool
+    public static function SetImportStatus(string $hash, string $status): bool
     {
-        return self::add(sprintf(self::KEY_FORMAT, $hash), $importId);
+        return self::add(sprintf(self::KEY_FORMAT, $hash), $status);
     }
 }

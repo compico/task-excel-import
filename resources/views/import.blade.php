@@ -1,4 +1,7 @@
-@include('header', [ 'scripts' => ['resources/css/import.css', 'resources/js/app.js', 'resources/js/file_import.js']])
+@include('header', [
+    'scripts' => ['resources/css/import.css', 'resources/js/app.js', 'resources/js/file_import.js'],
+    'title' => 'Product Import',
+])
 @include('navbar')
         <main class="container">
             <div class="import container">

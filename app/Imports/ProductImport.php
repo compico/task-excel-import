@@ -8,7 +8,6 @@ use App\Helper\PriceHelper;
 use App\Models\ExtraField;
 use App\Models\Photo;
 use App\Models\Product;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -71,11 +70,20 @@ class ProductImport implements ToModel, WithHeadingRow {
          * 'Доп. поле: Категория товара' => 'Женщинам_Белье',
          * )
          */
+        $duplicate = Product::query()
+            ->where('external_code', $row['Внешний код'])
+            ->select('id')
+            ->first();
+        if ($duplicate !== null) {
+            Log::info('Duplicate', ['id' => $duplicate->id]);
+            return;
+        }
+
         $price = PriceHelper::GetFloat($row['Цена: Цена продажи']);
         $discount = $price - PriceHelper::GetFloat($row['Минимальная цена']);
 
         /** @var Product $product */
-        $product = Product::create([
+        $product = Product::insertOrIgnore([
             'external_code' => $row['Внешний код'],
             'name' => $row['Наименование'],
             'description' => $row['Описание'],
@@ -116,7 +124,7 @@ class ProductImport implements ToModel, WithHeadingRow {
                 uniqid('photo_')
             );
 
-            $file = Storage::drive('public')->put(
+            Storage::drive('public')->put(
                     $fileName,
                     $response->body(),
                     'public'

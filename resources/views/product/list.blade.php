@@ -1,13 +1,18 @@
-@include('header', [ 'scripts' => ['resources/css/app.css', 'resources/js/app.js']])
+@include('header',[
+        'scripts' => ['resources/css/app.css', 'resources/js/app.js'],
+        'title' => 'Product list',
+])
 @include('navbar')
 <main class="container">
     <table>
-        <thead><tr>
+        <thead>
+        <tr>
             <th scope="col"></th>
             <th scope="col">Название</th>
             <th scope="col">Описание</th>
             <th scope="col">Цена</th>
-        </tr></thead>
+        </tr>
+        </thead>
         <tbody>
         @foreach ($products as $product)
             <tr>
@@ -19,5 +24,18 @@
         @endforeach
         </tbody>
     </table>
+    <nav aria-label="breadcrumb">
+        <ul>
+            @isset($previous_page)
+                <li><a href="{{ $previous_page }}">Previous Page</a></li>
+            @endisset
+            @isset($previous_page, $next_page)
+
+            @endisset
+            @isset($next_page)
+                <li><a href="{{ $next_page }}">Next Page</a></li>
+            @endisset
+        </ul>
+    </nav>
 </main>
 @include('footer')

@@ -5,6 +5,9 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
         @vite($scripts)
-        <title>Product import</title>
+        @isset($description)
+            <meta name="description" content="{{ $description }}" />
+        @endisset
+        <title>{{ $title }}</title>
     </head>
     <body>

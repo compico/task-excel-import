@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Cache\ProductsImportCache;
 use App\Imports\ProductImport;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
@@ -34,6 +35,8 @@ class ImportExcelFileJob implements ShouldQueue
 
         HeadingRowFormatter::default('none');
 
-        dump(Excel::import(new ProductImport, $this->filePath));
+        Excel::import(new ProductImport, $this->filePath);
+
+        ProductsImportCache::SetImportStatus($this->hash, ProductsImportCache::STATUS_IMPORTED);
     }
 }
